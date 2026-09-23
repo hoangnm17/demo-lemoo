@@ -5,13 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Lemoo 🍋 — Demo Art Toy Blind Box</title>
 <!-- ============================================================
-  LEMOO v6 — DEMO FULL UNLOCK + GACHA HÀNH ĐỘNG
-  · Nhân vật: mở sẵn 8/8 (demo) — production sẽ nhận qua QR/mã hộp
-  · Gacha: chỉ quay ra HÀNH ĐỘNG (dùng cho mọi nhân vật,
-    lời thoại tự đổi theo tính cách từng nhân vật)
-  · Hành động 👑🌀: chỉ nhận qua GIFTCODE
-  - Sửa hành động: ACTIONS (gacha) + GIFT_ACTIONS (giftcode)
-  - Sửa nhân vật/series: CHARS, SERIES | Thay 3D: open3D()
+  LEMOO v8 — ONE-TAP WARDROBE
+  · Home = sân khấu nhân vật (kiểu Talking Tom)
+  · 1 nút 👗 duy nhất → mở bảng Trang phục (tab: Đầu/Hoa tai/Dây/Túi/Đặc biệt/Nền)
+  · 8 nhân vật mở sẵn (demo) · Gacha chỉ quay HÀNH ĐỘNG
+  · Hành động 👑🌀 nhận qua GIFTCODE (thoại đổi theo tính cách)
+  - Nhân vật/series: CHARS, SERIES | Hành động: ACTIONS, GIFT_ACTIONS
+  - Phụ kiện: ACC (fx,fy,s) | Nền phòng: BGS_CHAR | Thay 3D: open3D()
 ============================================================ -->
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
@@ -21,13 +21,13 @@ body{font-family:'Baloo 2',system-ui,'Segoe UI Emoji',sans-serif;background:line
 button{font-family:inherit;border:0;cursor:pointer}
 .app{width:100%;max-width:430px;height:100dvh;max-height:940px;margin:0 auto;background:var(--bg);position:relative;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(214,120,150,.18)}
 @media(min-width:481px){body{display:grid;place-items:center;min-height:100vh;padding:24px}.app{height:min(100dvh - 48px,900px);border-radius:36px}}
-.top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 8px}
 .logo{font-weight:800;font-size:21px;background:linear-gradient(90deg,#F0688C,#F2A25C);-webkit-background-clip:text;background-clip:text;color:transparent}
 .chips{display:flex;gap:8px}
 .chip{background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:700;color:var(--ink);box-shadow:0 2px 8px rgba(214,120,150,.08)}
 main{flex:1;position:relative}
-.screen{position:absolute;inset:0;padding:8px 16px 100px;overflow-y:auto;display:none}
-.screen.active{display:block;animation:fadeUp .25s ease}
+.screen{position:absolute;inset:0;padding:6px 16px 96px;overflow-y:auto;display:none;flex-direction:column}
+.screen.active{display:flex;animation:fadeUp .25s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
 .card{background:var(--card);border-radius:var(--r);padding:16px;box-shadow:0 4px 18px rgba(214,120,150,.10);margin-bottom:14px}
 .btn{display:block;width:100%;padding:14px;border-radius:16px;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(90deg,var(--p1),var(--p2));box-shadow:0 8px 20px rgba(248,135,169,.35)}
@@ -37,29 +37,15 @@ main{flex:1;position:relative}
 .row{display:flex;gap:10px}
 h2.sec{font-size:17px;margin:4px 2px 10px}
 .muted{color:var(--muted);font-size:13px}
-.hero{background:linear-gradient(135deg,#F887A9,#FFB36B);color:#fff;border-radius:24px;padding:22px 18px;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:0 12px 30px rgba(248,135,169,.30)}
-.hero:after{content:'🍋';position:absolute;right:-4px;bottom:-14px;font-size:90px;opacity:.25;transform:rotate(-12deg)}
-.hero .tag{background:rgba(255,255,255,.25);display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.5px}
-.hero h1{font-size:27px;line-height:1.15;margin:8px 0 6px}
-.hero p{font-size:13px;opacity:.95;margin-bottom:14px}
-.strip{display:flex;gap:10px;overflow-x:auto;padding:2px 2px 8px}
-.mini{flex:0 0 auto;width:96px;background:#fff;border:1.5px solid #FFEBE4;border-radius:18px;padding:12px 8px;text-align:center;box-shadow:0 4px 12px rgba(214,120,150,.10)}
-.mini .em{font-size:44px;display:block;animation:floaty 3s ease-in-out infinite}
-.mini b{font-size:12px;display:block;margin-top:4px}
-.mini small{font-size:10px;color:var(--muted)}
-@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.nav{position:absolute;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1.5px solid var(--line);padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
-.nav button{flex:1;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--muted)}
-.nav button .ic{font-size:22px}
-.nav button.on{color:#F0688C}
-/* ===== LEMOO STUDIO ===== */
-.stage{position:relative;height:270px;border-radius:24px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:12px;border:1.5px solid var(--line)}
+/* ===== SÂN KHẤU NHÂN VẬT ===== */
+.hwrap{flex:1;display:flex;flex-direction:column;min-height:0}
+.stage{position:relative;flex:1;min-height:330px;border-radius:26px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1.5px solid var(--line)}
 .decor{position:absolute;inset:0;pointer-events:none;z-index:1}
-.decor span{position:absolute;transform:translate(-50%,-50%);opacity:.55;pointer-events:none}
-.charbox{position:absolute;left:50%;top:54%;width:150px;height:150px;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;animation:floaty 4s ease-in-out infinite}
-.charbox .em{font-size:115px;filter:drop-shadow(0 12px 12px rgba(150,80,110,.22));user-select:none}
+.decor span{position:absolute;transform:translate(-50%,-50%);opacity:.5;pointer-events:none}
+.charbox{position:absolute;left:50%;top:55%;width:160px;height:160px;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;animation:floaty 4s ease-in-out infinite}
+.charbox .em{font-size:120px;filter:drop-shadow(0 12px 12px rgba(150,80,110,.22));user-select:none}
 .acc{position:absolute;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 2px 3px rgba(0,0,0,.15));z-index:3}
-.bubble{position:absolute;top:14px;left:38%;transform:translateX(-50%);background:#fff;padding:10px 14px;border-radius:16px;font-size:13.5px;font-weight:700;max-width:60%;box-shadow:0 8px 20px rgba(150,80,110,.18);opacity:0;transition:.25s;text-align:center;z-index:5}
+.bubble{position:absolute;top:48px;left:42%;transform:translateX(-50%);background:#fff;padding:10px 14px;border-radius:16px;font-size:13.5px;font-weight:700;max-width:58%;box-shadow:0 8px 20px rgba(150,80,110,.18);opacity:0;transition:.25s;text-align:center;z-index:7}
 .bubble.show{opacity:1;animation:fadeUp .25s}
 .bubble:after{content:'';position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:#fff;border-bottom:0}
 .anim-b{animation:b .7s ease} .anim-sh{animation:sh .6s ease} .anim-j{animation:j .8s ease} .anim-sp{animation:sp 1s linear}
@@ -67,15 +53,32 @@ h2.sec{font-size:17px;margin:4px 2px 10px}
 @keyframes sh{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
 @keyframes j{0%,100%{transform:translateY(0) scale(1)}30%{transform:translateY(-32px) scale(1.12)}60%{transform:translateY(0) scale(.92)}}
 @keyframes sp{to{transform:rotate(360deg)}}
-.sidemenu{position:absolute;right:8px;top:10px;display:grid;grid-template-columns:repeat(2,1fr);gap:6px;z-index:4}
-.smbtn{width:48px;background:rgba(255,255,255,.94);border:1.5px solid var(--line);border-radius:12px;padding:5px 0 3px;display:flex;flex-direction:column;align-items:center;font-size:17px;box-shadow:0 3px 8px rgba(214,120,150,.14)}
-.smbtn span{font-size:8.5px;font-weight:800;color:#C48DA0}
-.pill{position:absolute;z-index:4;padding:8px 14px;border-radius:999px;font-weight:800;font-size:13px;box-shadow:0 4px 12px rgba(214,120,150,.25)}
-.pill.shop{top:10px;left:10px;background:rgba(255,255,255,.94);color:#E2557E;border:1.5px solid var(--line)}
-.pill.ready{bottom:10px;left:10px;background:linear-gradient(90deg,var(--p1),var(--p2));color:#fff}
+.topname{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:6;background:rgba(255,255,255,.94);border:1.5px solid var(--line);border-radius:999px;padding:6px 16px;font-weight:800;font-size:14px;white-space:nowrap;box-shadow:0 3px 10px rgba(214,120,150,.15)}
+.charnav{position:absolute;top:56%;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.92);border:1.5px solid var(--line);font-size:16px;font-weight:800;color:#E2557E;z-index:6;box-shadow:0 3px 10px rgba(214,120,150,.18)}
+.charnav.l{left:8px}.charnav.r{right:8px}
+.pill{position:absolute;z-index:6;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.94);border:1.5px solid var(--line);font-size:19px;box-shadow:0 3px 10px rgba(214,120,150,.18);display:flex;align-items:center;justify-content:center}
+.pill.shop{top:8px;left:8px}
+.pill.act{top:58px;left:8px}
+.pill.dress{top:8px;right:8px;width:52px;height:52px;font-size:24px;background:linear-gradient(135deg,var(--p1),var(--p2));border:0;color:#fff;box-shadow:0 6px 16px rgba(248,135,169,.45)}
+.pill.dress:after{content:'Trang phục';position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:8.5px;font-weight:800;color:#C48DA0;white-space:nowrap}
+.quickbar{display:flex;justify-content:space-around;gap:6px;padding:14px 2px 4px}
+.qbtn{width:56px;height:58px;border-radius:18px;background:#fff;border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 4px 12px rgba(214,120,150,.14)}
+.qbtn .qi{font-size:22px;line-height:1}
+.qbtn small{font-size:9px;font-weight:800;color:#C48DA0}
+.qbtn:active{transform:scale(.94)}
+/* NAV */
+.nav{position:absolute;bottom:0;left:0;right:0;display:flex;background:#fff;border-top:1.5px solid var(--line);padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:10}
+.nav button{flex:1;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--muted)}
+.nav button .ic{font-size:22px}
+.nav button.on{color:#F0688C}
+/* WARDROBE */
+.dtabs{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 4px}
+.dtab{flex:0 0 auto;padding:9px 13px;border-radius:12px;font-weight:800;font-size:13px;background:#FFF6F3;border:1.5px solid var(--line);color:var(--muted)}
+.dtab.on{color:#fff;background:linear-gradient(90deg,var(--p1),var(--p2));border-color:transparent;box-shadow:0 4px 12px rgba(248,135,169,.35)}
 .accchip{display:flex;flex-direction:column;align-items:center;gap:3px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px;font-size:26px;min-width:56px}
 .accchip small{font-size:10px;color:var(--muted);font-weight:800}
 .accchip.sel{border-color:var(--p1);background:#FFF0F4}
+/* RARITY + SERIES */
 .rar-chip{display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.5px}
 .r-common{background:#E1F6EA;color:#2F9E68}.r-rare{background:#EFEAFF;color:#7E5FD6}.r-secret{background:linear-gradient(90deg,#FFE3B3,#FFC98F);color:#8A5300}
 .ser-chip{display:inline-block;padding:4px 14px;border-radius:999px;font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.15)}
@@ -83,22 +86,24 @@ h2.sec{font-size:17px;margin:4px 2px 10px}
 .stab{flex:0 0 auto;padding:10px 14px;border-radius:14px;font-weight:800;font-size:13px;background:#fff;border:1.5px solid var(--line);color:var(--muted)}
 .stab .n{opacity:.9;font-size:12px}
 .stab.on{color:#fff;background:linear-gradient(90deg,var(--c1),var(--c2));border-color:transparent;box-shadow:0 6px 16px rgba(214,120,150,.25)}
+/* GACHA */
 .gbox{font-size:96px;display:block;text-align:center;margin:10px 0;cursor:pointer;user-select:none}
 .gbox.shaking{animation:gshake .25s linear infinite}
 @keyframes gshake{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
 .hist{font-size:13px;padding:8px 0;border-bottom:1px dashed #F3DFE6}
 .hist:last-child{border:0}
+.achip{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 6px;font-size:26px;min-width:62px}
+.achip small{font-size:10px;color:var(--muted);font-weight:800;text-align:center;line-height:1.2}
+.achip.owned{border-color:var(--p1);background:#FFF0F4}
+.achip.lock{background:#F9F2F5;color:#C9B6C4}
+/* COLLECTION */
 .progbar{height:12px;background:#F7E7EC;border-radius:999px;overflow:hidden;margin:8px 0}
 .progbar i{display:block;height:100%;background:linear-gradient(90deg,var(--p1),var(--p2));border-radius:999px;transition:.5s}
 .cgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .ccell{background:#fff;border-radius:18px;padding:14px 6px;text-align:center;box-shadow:0 4px 14px rgba(214,120,150,.10);cursor:pointer;border:2px solid transparent}
 .ccell .em{font-size:44px;display:block}
 .ccell b{font-size:12px}
-/* ACTION POOL */
-.achip{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px 6px;font-size:26px;min-width:62px}
-.achip small{font-size:10px;color:var(--muted);font-weight:800;text-align:center;line-height:1.2}
-.achip.owned{border-color:var(--p1);background:#FFF0F4}
-.achip.lock{background:#F9F2F5;color:#C9B6C4}
+/* MODALS */
 .modal{position:fixed;inset:0;background:rgba(120,60,90,.35);display:none;align-items:center;justify-content:center;z-index:50;padding:18px}
 .modal.show{display:flex}
 .sheet{background:#fff;border-radius:26px;padding:22px;width:100%;max-width:380px;max-height:86vh;overflow-y:auto;text-align:center;color:var(--ink);animation:pop .3s cubic-bezier(.2,1.4,.4,1)}
@@ -110,12 +115,16 @@ h2.sec{font-size:17px;margin:4px 2px 10px}
 .rev-char.showing{animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
 .confetti{position:absolute;font-size:22px;animation:cf 1.1s ease forwards;pointer-events:none}
 @keyframes cf{from{transform:translate(0,0) rotate(0);opacity:1}to{transform:translate(var(--dx),var(--dy)) rotate(220deg);opacity:0}}
+@keyframes heartup{from{transform:translate(-50%,-50%) scale(.6);opacity:1}to{transform:translate(var(--hx),var(--hy)) scale(1.25);opacity:0}}
+.heart{position:absolute;font-size:26px;pointer-events:none;animation:heartup 1s ease forwards;z-index:8}
+/* SCAN */
 #ovScan{position:fixed;inset:0;background:rgba(60,30,45,.92);z-index:60;display:none;align-items:center;justify-content:center;flex-direction:column;color:#fff}
 #ovScan.show{display:flex}
 .scanbox{position:relative;width:230px;height:230px;background:#fff;border-radius:18px;padding:12px}
 .scanbox canvas{width:100%;height:100%;image-rendering:pixelated;border-radius:8px}
 .scanline{position:absolute;left:8px;right:8px;height:4px;background:linear-gradient(90deg,var(--p1),var(--p2));border-radius:4px;animation:scan 1.4s ease-in-out infinite alternate}
 @keyframes scan{from{top:10px}to{top:calc(100% - 14px)}}
+/* PHOTOBOOTH */
 .pstage{position:relative;height:340px;border-radius:20px;overflow:hidden;background:linear-gradient(180deg,#FFE9F0,#FFF8F3);touch-action:none;border:1.5px solid var(--line)}
 .pstage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pchar{position:absolute;font-size:130px;cursor:grab;user-select:none;filter:drop-shadow(0 10px 10px rgba(0,0,0,.2));transform:translate(-50%,-50%);left:50%;top:55%}
@@ -125,7 +134,7 @@ input[type=text]{width:100%;padding:13px 14px;border-radius:14px;border:2px soli
 input[type=text]:focus{border-color:var(--p1)}
 #toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:#5B4A52;color:#fff;padding:11px 18px;border-radius:14px;font-size:14px;font-weight:700;opacity:0;transition:.3s;z-index:99;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.backbtn{background:#fff;border:1.5px solid var(--line);color:var(--ink);border-radius:12px;padding:8px 14px;font-weight:800;font-size:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(214,120,150,.08)}
+.backbtn{background:#fff;border:1.5px solid var(--line);color:var(--ink);border-radius:12px;padding:8px 14px;font-weight:800;font-size:14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(214,120,150,.08);width:fit-content}
 model-viewer{width:100%;height:340px;border-radius:16px;background:#3A3340;color:#fff}
 </style>
 </head>
@@ -138,38 +147,58 @@ model-viewer{width:100%;height:340px;border-radius:16px;background:#3A3340;color
   </header>
 
   <main>
-    <!-- HOME -->
+    <!-- HOME = NHÂN VẬT -->
     <section class="screen active" id="scr-home">
-      <div class="hero">
-        <span class="tag">BẢN DEMO · NHÂN VẬT MỞ SẴN 8/8</span>
-        <h1>Huyền Thoại<br>Chibi Việt 🇻🇳</h1>
-        <p>Toàn bộ nhân vật đã sẵn sàng! Hãy mặc đồ trong <b>Lemoo Studio</b> và quay <b>Gacha Hành Động</b> để săn động tác độc quyền!</p>
-        <button class="btn" style="background:#fff;color:#E2557E" onclick="go('gacha')">Quay Gacha Hành Động</button>
+      <div class="hwrap">
+        <div class="stage" id="charStage">
+          <div class="decor" id="decorLayer"></div>
+          <div class="topname" id="charNameChip">Chó Mũi Đỏ</div>
+          <button class="pill shop" onclick="toast('🛍 Cửa hàng Lemoo — sắp mở bán!')">🛍</button>
+          <button class="pill act" onclick="go('act')" title="Kích hoạt hộp">📦</button>
+          <button class="pill dress" onclick="openDress()" title="Trang phục">👗</button>
+          <div class="bubble" id="charBubble"></div>
+          <div class="charbox" id="charBox" onclick="petChar()">
+            <span class="em" id="charEmoji">🐕</span>
+            <span class="acc" data-slot="dau"></span>
+            <span class="acc" data-slot="hoatai"></span>
+            <span class="acc" data-slot="day"></span>
+            <span class="acc" data-slot="tuixach"></span>
+            <span class="acc" data-slot="dacbiet"></span>
+          </div>
+          <button class="charnav l" onclick="switchChar(-1)">◀</button>
+          <button class="charnav r" onclick="switchChar(1)">▶</button>
+        </div>
+        <div class="quickbar" id="quickbar"></div>
       </div>
-      <div class="card"><div class="row" style="justify-content:space-between;align-items:center">
-        <div><b>Bộ sưu tập</b><div class="muted" id="homeProg">8/8 nhân vật · 2 series hoàn thành</div></div>
-        <button class="btn small" onclick="go('col')">Xem</button>
-      </div></div>
-      <h2 class="sec">Nhân vật của bạn</h2>
-      <div class="strip" id="homeOwned"></div>
-      <div class="card"><div class="row" style="justify-content:space-between;align-items:center">
-        <div><b>Gacha Hành Động</b><div class="muted">Còn <span id="homeSpins">3</span> lượt — Secret 10%!</div></div>
-        <button class="btn small" onclick="go('gacha')">Quay</button>
-      </div></div>
-      <div class="card"><b>Luồng sản phẩm (production)</b><p class="muted" style="margin-top:6px">Mua hộp Art Toy → quét QR → <b>nhận nhân vật</b>. 🎰 Mỗi hộp tặng lượt Gacha → <b>quay hành động</b> cho nhân vật. 🎁 Hành động 👑 độc quyền nhận qua Giftcode. <i>(Bản demo mở sẵn nhân vật để dễ trải nghiệm!)</i></p></div>
+      <div class="card" style="margin-top:12px;text-align:center">
+        <h2 id="charName" style="font-size:22px"></h2>
+        <div style="margin:8px 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <span class="rar-chip" id="charRar"></span>
+          <span class="ser-chip" id="charSeries"></span>
+          <span class="rar-chip" style="background:#FFF3F0;color:#B78AA0" id="charTag"></span>
+        </div>
+        <div class="row" id="charActions" style="justify-content:center;flex-wrap:wrap"></div>
+        <div class="row" style="justify-content:center;margin-top:10px">
+          <button class="btn small ghost" onclick="openPhoto()">📸 Photobooth</button>
+          <button class="btn small ghost" onclick="open3D()">🧊 AR 3D</button>
+          <button class="btn small ghost" onclick="shareChar()">🔗 Chia sẻ</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:0"><b>📜 Lore nhân vật</b><p class="muted" id="charLore" style="margin-top:6px"></p></div>
+      <div style="height:8px"></div>
     </section>
 
     <!-- ACTIVATE (mô phỏng) -->
-    <section class="screen" id="scr-act">
-      <button class="backbtn" onclick="go('home')">← Trang chủ</button>
+    <section class="screen" id="scr-act" style="display:none">
+      <button class="backbtn" onclick="go('home')">← Về nhân vật</button>
       <div class="card" style="text-align:center">
         <canvas id="qrCanvas" width="140" height="140" style="border-radius:14px"></canvas>
         <h2 class="sec" style="margin-top:12px">Kích hoạt hộp (mô phỏng)</h2>
         <p class="muted" style="margin-bottom:14px">Demo đã mở sẵn nhân vật — quét mã để nhận <b>+1 lượt Gacha & +100 💎</b></p>
-        <button class="btn" onclick="startScan()">Giả lập quét QR (demo)</button>
+        <button class="btn" onclick="startScan()">📷 Giả lập quét QR (demo)</button>
       </div>
       <div class="card">
-        <b>⌨Hoặc nhập mã dưới hộp</b>
+        <b>⌨️ Hoặc nhập mã dưới hộp</b>
         <div style="display:flex;gap:8px;margin-top:10px">
           <input type="text" id="codeInput" placeholder="VD: VUNUONG">
           <button class="btn small" onclick="activateCode()">Kích hoạt</button>
@@ -177,62 +206,12 @@ model-viewer{width:100%;height:340px;border-radius:16px;background:#3A3340;color
         <p class="muted" style="margin:10px 0 6px">Mã demo (bấm để điền):</p>
         <div id="codeChips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
-      <div class="card"><p class="muted">📦 <b>Production:</b> QR chứa token ký số HMAC, mỗi mã dùng 1 lần — nhân vật chỉ nhận qua hộp thật, chống giả mạo 100%.</p></div>
-    </section>
-
-    <!-- CHARACTER — LEMOO STUDIO -->
-    <section class="screen" id="scr-char">
-      <button class="backbtn" onclick="go('col')">← Bộ sưu tập</button>
-      <div class="stage" id="charStage">
-        <div class="decor" id="decorLayer"></div>
-        <button class="pill shop" onclick="toast('🛍 Cửa hàng Lemoo — sắp mở bán!')">🛍 Shop</button>
-        <div class="sidemenu">
-          <button class="smbtn" onclick="openAcc('dau')">👑<span>Đầu</span></button>
-          <button class="smbtn" onclick="openAcc('hoatai')">🌸<span>Hoa tai</span></button>
-          <button class="smbtn" onclick="openAcc('day')">📿<span>Dây</span></button>
-          <button class="smbtn" onclick="openAcc('tuixach')">👛<span>Túi xách</span></button>
-          <button class="smbtn" onclick="openAcc('dacbiet')">✨<span>Đặc biệt</span></button>
-          <button class="smbtn" onclick="openAcc('bg')">🖼<span>Nền</span></button>
-        </div>
-        <div class="bubble" id="charBubble"></div>
-        <div class="charbox" id="charBox" onclick="playAction(0)">
-          <span class="em" id="charEmoji">🐕</span>
-          <span class="acc" data-slot="dau"></span>
-          <span class="acc" data-slot="hoatai"></span>
-          <span class="acc" data-slot="day"></span>
-          <span class="acc" data-slot="tuixach"></span>
-          <span class="acc" data-slot="dacbiet"></span>
-        </div>
-        <button class="pill ready" id="btnReady">Sẵn sàng</button>
-      </div>
-      <div class="card" style="text-align:center">
-        <h2 id="charName" style="font-size:24px"></h2>
-        <div style="margin:8px 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-          <span class="rar-chip" id="charRar"></span>
-          <span class="ser-chip" id="charSeries"></span>
-          <span class="rar-chip" style="background:#FFF3F0;color:#B78AA0" id="charTag"></span>
-        </div>
-        <div class="row" id="charActions" style="justify-content:center;flex-wrap:wrap"></div>
-      </div>
-      <div class="card" id="accPanel" style="display:none">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <b id="accTitle">Đầu</b>
-          <button class="btn small ghost" onclick="closeAcc()">Đóng</button>
-        </div>
-        <div id="accItems" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"></div>
-        <button class="btn small ghost" style="margin-top:12px" onclick="clearAccSlot()">Bỏ món này</button>
-        <button class="btn small ghost" style="margin-top:8px" onclick="clearAllAcc()">Xóa hết trang phục</button>
-      </div>
-      <div class="row">
-        <button class="btn ghost" id="btnPhoto">Chụp ảnh</button>
-        <button class="btn ghost" id="btn3d">AR 3D</button>
-        <button class="btn ghost" id="btnShare">Chia sẻ</button>
-      </div>
-      <div class="card" style="margin-top:14px"><b>📜 Lore nhân vật</b><p class="muted" id="charLore" style="margin-top:6px"></p></div>
+      <div class="card"><p class="muted">📦 <b>Production:</b> QR chứa token ký số HMAC, mỗi mã dùng 1 lần — nhân vật chỉ nhận qua hộp thật, chống giả mạo 100%. Mỗi hộp kích hoạt tặng <b>1 lượt Gacha hành động</b>.</p></div>
     </section>
 
     <!-- GACHA — HÀNH ĐỘNG -->
-    <section class="screen" id="scr-gacha">
+    <section class="screen" id="scr-gacha" style="display:none">
+      <button class="backbtn" onclick="go('home')">← Về nhân vật</button>
       <div class="card" style="text-align:center">
         <h2 class="sec">🎰 Gacha Hành Động</h2>
         <p class="muted">Quay ra <b>hành động độc quyền</b> — dùng cho <b>mọi nhân vật</b>, lời thoại tự đổi theo tính cách! ✨</p>
@@ -246,30 +225,32 @@ model-viewer{width:100%;height:340px;border-radius:16px;background:#3A3340;color
       </div>
       <div class="card">
         <b>🎴 Bộ sưu tập hành động</b>
-        <p class="muted" style="margin:4px 0 10px">Hành động nhận qua Giftcode.</p>
+        <p class="muted" style="margin:4px 0 10px">Hành độngnhận qua Giftcode (tab Tôi).</p>
         <div id="actPool" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div>
       </div>
       <div class="card"><b>🧾 Lịch sử quay</b><div id="gHist"><p class="muted">Chưa có lượt nào.</p></div></div>
     </section>
 
     <!-- COLLECTION -->
-    <section class="screen" id="scr-col">
+    <section class="screen" id="scr-col" style="display:none">
+      <button class="backbtn" onclick="go('home')">← Về nhân vật</button>
       <div class="card">
         <div class="row" style="justify-content:space-between;align-items:center">
           <b>🗃 Bộ sưu tập tổng</b><b id="colProg">8/8</b>
         </div>
         <div class="progbar"><i id="colBar" style="width:100%"></i></div>
-        <p class="muted">Bản demo mở sẵn toàn bộ nhân vật — đủ series → quà từ shop (2 series đã hoàn thành!)</p>
+        <p class="muted">Bấm nhân vật để đưa lên sân khấu chính! · Đủ series → quà từ shop</p>
       </div>
       <div class="stabs" id="colTabs"></div>
       <div id="colPanel"></div>
     </section>
 
     <!-- PROFILE -->
-    <section class="screen" id="scr-prof">
+    <section class="screen" id="scr-prof" style="display:none">
+      <button class="backbtn" onclick="go('home')">← Về nhân vật</button>
       <div class="card" style="text-align:center">
         <div style="font-size:56px">🧑‍🚀</div>
-        <b style="font-size:18px">Chủ nhân Lemoo</b>
+        <b style="font-size:18px">Lemoo</b>
         <div class="row" style="justify-content:center;margin-top:10px;flex-wrap:wrap">
           <span class="chip">💎 <span id="profPoints">0</span> điểm</span>
           <span class="chip">🎟️ <span id="profSpins">3</span> lượt quay</span>
@@ -281,7 +262,7 @@ model-viewer{width:100%;height:340px;border-radius:16px;background:#3A3340;color
       <div class="card">
         <b>🎁 Nhập Giftcode</b>
         <div style="display:flex;gap:8px;margin-top:10px">
-          <input type="text" id="giftInput" placeholder="VD: LEMOOBOT">
+          <input type="text" id="giftInput" placeholder="VD: LEMOO2025">
           <button class="btn small" onclick="redeemGift()">Nhận</button>
         </div>
         <div id="giftUsed" style="margin-top:8px"></div>
@@ -292,12 +273,12 @@ model-viewer{width:100%;height:340px;border-radius:16px;background:#3A3340;color
           <button class="btn ghost" onclick="resetDemo()">♻️ Reset</button>
         </div>
       </div>
-      <p class="muted" style="text-align:center">Lemoo Demo v6 — Full Unlock + Gacha Hành Động<br>Production: Firebase + QR ký số + model 3D glTF</p>
+      <p class="muted" style="text-align:center">Lemoo Demo v8 — One-tap Wardrobe<br>Production: Firebase + QR ký số + model 3D glTF</p>
     </section>
   </main>
 
   <nav class="nav">
-    <button data-go="home" class="on"><span class="ic">🏠</span><span>Trang chủ</span></button>
+    <button data-go="home" class="on"><span class="ic">🧸</span><span>Nhân vật</span></button>
     <button data-go="col"><span class="ic">🗃</span><span>Bộ sưu tập</span></button>
     <button data-go="gacha"><span class="ic">🎰</span><span>Gacha</span></button>
     <button data-go="prof"><span class="ic">👤</span><span>Tôi</span></button>
@@ -309,6 +290,21 @@ model-viewer{width:100%;height:340px;border-radius:16px;background:#3A3340;color
   <div class="scanbox"><canvas id="scanCanvas" width="200" height="200"></canvas><div class="scanline"></div></div>
   <p style="margin-top:18px;font-weight:700">Đưa mã QR vào khung…</p>
 </div>
+
+<!-- WARDROBE (1 nút 👗 → bảng trang phục) -->
+<div class="modal" id="mDress"><div class="sheet" style="text-align:left">
+  <div class="row" style="justify-content:space-between;align-items:center">
+    <b style="font-size:17px">👗 Lemoo Wardrobe</b>
+    <button class="btn small" style="padding:8px 18px" onclick="closeModal('mDress')">Xong</button>
+  </div>
+  <p class="muted" style="margin-top:4px" id="dressWho"></p>
+  <div class="dtabs" id="dressTabs"></div>
+  <div id="dressItems" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"></div>
+  <div class="row" style="margin-top:14px">
+    <button class="btn small ghost" onclick="clearAccSlot()">Bỏ món tab này</button>
+    <button class="btn small ghost" onclick="clearAllAcc()">Xóa hết trang phục</button>
+  </div>
+</div></div>
 
 <!-- REVEAL -->
 <div class="modal" id="mReveal"><div class="sheet">
@@ -357,12 +353,13 @@ model-viewer{width:100%;height:340px;border-radius:16px;background:#3A3340;color
 <div class="modal" id="mScript"><div class="sheet" style="text-align:left">
   <h3 style="text-align:center">📜 Kịch bản demo 60 giây</h3>
   <ol style="margin:14px 0 0 18px;font-size:14px;line-height:1.9">
-    <li><b>Trang chủ</b> — 8 nhân vật mở sẵn, giới thiệu 3 series</li>
-    <li><b>Lemoo Studio</b> — chạm nhân vật → thoại theo tính cách → 👑🌸👛 mặc đồ, đổi nền → "Sẵn sàng 📸"</li>
-    <li><b>🎰 Gacha Hành Động</b> — quay → ra hành động → "Thử ngay" → mở 2-3 nhân vật bấm cùng hành động để thấy <b>lời thoại đổi theo tính cách!</b></li>
+    <li><b>Mở app = sân khấu nhân vật</b> — chạm vào nhân vật → tim bay + thoại!</li>
+    <li>◀ ▶ chuyển nhân vật · quickbar dưới để nghịch nhanh</li>
+    <li><b>👗 1 nút duy nhất</b> → Lemoo Wardrobe: chọn tab (Đầu/Hoa tai/Dây/Túi/Đặc biệt/Nền) → bấm món là mặc ngay!</li>
+    <li><b>🎰 Gacha Hành Động</b> — quay → "Thử ngay" → bấm cùng hành động trên 2-3 nhân vật → <b>thoại đổi theo tính cách!</b></li>
     <li><b>📸 Photobooth</b> — chụp ảnh kèm phụ kiện</li>
-    <li><b>👤 Tôi</b> — nhập giftcode <b>LEMOOBOT</b> → mở khóa hành động 👑</li>
-    <li><i>Giải thích: production sẽ khóa nhân vật — nhận qua QR hộp thật; mỗi hộp tặng 1 lượt gacha hành động.</i></li>
+    <li><b>👤 Tôi</b> — nhập giftcode <b>LEMOO2025</b> → mở khóa hành động 👑</li>
+    <li><i>Production: nhân vật khóa — nhận qua QR hộp thật; mỗi hộp tặng 1 lượt gacha.</i></li>
   </ol>
   <button class="btn" style="margin-top:14px" onclick="closeModal('mScript')">Đã rõ!</button>
 </div></div>
@@ -385,7 +382,6 @@ const SERIES=[
   reward:'??? Bí mật',hint:'Series 3 sắp ra mắt — theo dõi fanpage Lemoo để săn sớm!'}
 ];
 const CHARS=[
- /* ---- SERIES: LÀNG QUÊ (folk) ---- */
  {id:'CHOMUIDO',series:'folk',name:'Chó Mũi Đỏ',emoji:'🐕',rar:'common',color:'#FFE3D6',tag:'Phá hơi căng',
   lore:'Cái mũi đỏ là huy hiệu của loài chó thông minh nhất ngõ. Rất phá, rất nền, rất đáng yêu.',
   actions:[
@@ -401,16 +397,15 @@ const CHARS=[
  {id:'VUNUONG',series:'folk',name:'Vũ Nương',emoji:'🧚‍♀️',rar:'rare',color:'#FFE0EE',tag:'Xéo xắt but cute',
   lore:'Phu quân đi vắng, nàng chịu đủ khổ… nay tái sinh thành chibi: chê ai cũng mỉa mai cực đỉnh.',
   actions:[
-   {icon:'👋',label:'Chào',anim:'anim-b',lines:['Chào nhé! Đợi mãi mới chịu quét mã à?','Ố ơ, chủ nhân tới rồi. Người ta hay quên vợ về quê lắm nhỉ?']},
-   {icon:'😏',label:'Xéo',anim:'anim-sh',lines:['Bộ 8 đứa mà cậu mới cày được từng đó thôi? Cố lên nha.','Xem lore đi rồi biết tay tao "xé" drama nè.']},
+   {icon:'👋',label:'Chào',anim:'anim-b',lines:['Chào nhé! Đợi mãi mới chịu mở app à?','Ố ơ, chủ nhân tới rồi. Người ta hay quên vợ về quê lắm nhỉ?']},
+   {icon:'😏',label:'Xéo',anim:'anim-sh',lines:['Bộ 8 đứa mà cậu mới nghịch được từng đó thôi? Cố lên nha.','Xem lore đi rồi biết tay tao "xé" drama nè.']},
    {icon:'😢',label:'Tủi',anim:'anim-j',lines:['Sông hắn lạnh lắm… đừng bắt tao quay lại nhé!']}]},
  {id:'LAOHAC',series:'folk',name:'Lão Hạc',emoji:'🧓',rar:'rare',color:'#F3EDDD',tag:'Cộc cằn mà ấm',
   lore:'Ông già bán chó Vàng để nuôi thân — giờ thành chibi: miệng cộc lốc mà sợ mất cháu nhất trời.',
   actions:[
-   {icon:'👋',label:'Chào',anim:'anim-b',lines:['Hừm… cháu tới rồi đấy à. Ngồi đi, để ông rót chén trà.','Quét mã gì ở đâu? À… thời buổi nó thế rồi.']},
+   {icon:'👋',label:'Chào',anim:'anim-b',lines:['Hừm… cháu tới rồi đấy à. Ngồi đi, để ông rót chén trà.','Mở app gì ở đâu? À… thời buổi nó thế rồi.']},
    {icon:'🐕',label:'Nhớ Vàng',anim:'anim-j',lines:['Con Vàng ơi… ông vẫn để dành chén cơm cho nó đấy cháu ạ.']},
    {icon:'💰',label:'Kêu',anim:'anim-sh',lines:['Đừng đùa với ông! Lúa không đủ ăn thì nói, chứ lại giả vờ giàu!']}]},
- /* ---- SERIES: HUYỀN THOẠI KỲ VŨ (legend) ---- */
  {id:'THACHSANH',series:'legend',name:'Thạch Sanh',emoji:'🎸',rar:'common',color:'#DDF2DC',tag:'Trầm lặng mà chắc',
   lore:'Không cha không mẹ, lớn lên giữa rừng — mạnh như thần, hiền như đất. Có đàn tara là có cả thế giới.',
   actions:[
@@ -420,7 +415,7 @@ const CHARS=[
  {id:'SONTINH',series:'legend',name:'Sơn Tinh',emoji:'🏔️',rar:'rare',color:'#FFE6C7',tag:'Chill đỉnh núi',
   lore:'Vua núi, chill bậc nhất tam giới. Thủy Tinh nhắn tin cũng không rep — busy build núi.',
   actions:[
-   {icon:'🏔️',label:'Chào',anim:'anim-b',lines:['Cứ lên núi là gặp tao. Chill mà, không cần lễ vật.','Thủy Tinh nhắn gì? À, để tao rep… mai.']},
+   {icon:'🏔️',label:'Chào',anim:'anim-b',lines:['Cứ mở app là gặp tao. Chill mà, không cần lễ vật.','Thủy Tinh nhắn gì? À, để tao rep… mai.']},
    {icon:'🌊',label:'Diễn',anim:'anim-j',lines:['Nước lên thì tao… nâng núi lên. Hết bài.']},
    {icon:'🍃',label:'Chill',anim:'anim-sh',lines:['Nhà tao view triệu đô, đồ ăn đầy bàn. Mời.']}]},
  {id:'THUYTINH',series:'legend',name:'Thủy Tinh',emoji:'🌊',rar:'rare',color:'#D9ECFD',tag:'Drama quốc dân',
@@ -436,8 +431,7 @@ const CHARS=[
    {icon:'😴',label:'Ngủ',anim:'anim-sh',lines:['Ngủ ba ngày là chiến thuật nhé. Giặc tới là tỉnh.']}]}
 ];
 
-/* ===== GACHA: HÀNH ĐỘNG (không có nhân vật!) =====
-   byChar = lời thoại tự đổi theo tính cách từng nhân vật */
+/* ===== GACHA: HÀNH ĐỘNG ===== */
 const ACTIONS=[
  {id:'dance',name:'Nhảy múa',emoji:'💃',rar:'common',anim:'anim-j',byChar:{
   CHOMUIDO:'Wiggle wiggle! Mũi đỏ dẫn nhịp nhé!',TAM:'Tấm nhảy thôi ạ… đừng nhìn lâu, váy sắp bay!',
@@ -470,7 +464,6 @@ const ACTIONS=[
   THACHSANH:'(đàn vang lên — pháo hoa nhịp theo)',SONTINH:'Pháo hoa trên đỉnh núi — view triệu đô.',
   THUYTINH:'PHÁO HOA NƯỚC! Bắn lên!',THANHGIONG:'Tiếng pháo ra trận — hùng hồn!'}}
 ];
-/* ===== HÀNH ĐỘNG ĐỘC QUYỀN — chỉ nhận qua GIFTCODE ===== */
 const GIFT_ACTIONS=[
  {id:'royal',name:'Điệu Hoàng Gia',emoji:'👑',anim:'anim-b',gift:true,byChar:{
   CHOMUIDO:'Bow wow — cúi chào đẳng cấp nhé!',TAM:'Cháu chào theo kiểu cung đình ạ!',
@@ -485,7 +478,7 @@ const GIFT_ACTIONS=[
 ];
 const ALL_ACTIONS=[...ACTIONS,...GIFT_ACTIONS];
 
-/* ===== PHỤ KIỆN LEMOO STUDIO ===== */
+/* ===== PHỤ KIỆN (fx,fy: vị trí % trên hộp nhân vật · s: cỡ) ===== */
 const SLOTS=['dau','hoatai','day','tuixach','dacbiet'];
 const ACC={
  dau:{label:'👑 Đầu',items:[
@@ -510,47 +503,89 @@ const BGS_CHAR=[
 ];
 
 const GIFT_CODES={
-  'LEMOOBOT':{spins:1,points:100,action:'royal',label:'+1 lượt quay · 100 💎 · Hành động 👑 Điệu Hoàng Gia'},
+  'LEMOO2025':{spins:1,points:100,action:'royal',label:'+1 lượt quay · 100 💎 · Hành động 👑 Điệu Hoàng Gia'},
   'LEMONGARDEN':{points:300,action:'spin',label:'+300 💎 · Hành động 🌀 Xoay Nghịch Thiên'}
 };
 const WEIGHTS={common:55,rare:35,secret:10};
 const START_SPINS=3;
 
-/* ================= STATE (demo: mở sẵn toàn bộ nhân vật) ================= */
+/* ================= STATE ================= */
 const DEF={
-  owned:CHARS.map(c=>c.id),          /* ← 8/8 nhân vật mở sẵn */
+  owned:CHARS.map(c=>c.id),
   points:150,spins:START_SPINS,
-  codes:[],gift:{legend:true,folk:true}, /* 2 series hoàn thành sẵn */
-  hist:[],acts:[],dress:{}
+  codes:[],gift:{legend:true,folk:true},
+  hist:[],acts:[],dress:{},cur:CHARS[0].id
 };
-let S;try{S=JSON.parse(localStorage.getItem('lemoo_v4'))||{...DEF}}catch(e){S={...DEF}}
+let S;try{S=JSON.parse(localStorage.getItem('lemoo_v5'))||{...DEF}}catch(e){S={...DEF}}
 S={...DEF,...S};
 if(typeof S.gift!=='object'||!S.gift)S.gift={...DEF.gift};
 if(typeof S.dress!=='object'||!S.dress)S.dress={};
 if(!Array.isArray(S.acts))S.acts=[];
 if(!Array.isArray(S.owned)||S.owned.length<CHARS.length)S.owned=CHARS.map(c=>c.id);
-const save=()=>localStorage.setItem('lemoo_v4',JSON.stringify(S));
+if(!CHARS.find(c=>c.id===S.cur))S.cur=CHARS[0].id;
+const save=()=>localStorage.setItem('lemoo_v5',JSON.stringify(S));
 const $=id=>document.getElementById(id);
-const CUR={id:null};let CURPHOTO=null;let COL_CUR='legend';let ACC_CUR=null;
+let CURPHOTO=null,DRESS_TAB='dau';
 const charsOf=sid=>CHARS.filter(c=>c.series===sid);
 const serOf=cid=>SERIES.find(s=>s.id===CHARS.find(c=>c.id===cid).series);
+const curC=()=>CHARS.find(c=>c.id===S.cur);
 
 /* ================= NAV ================= */
 function go(name){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  $('scr-'+name).classList.add('active');
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none'});
+  const sc=$('scr-'+name);sc.classList.add('active');sc.style.display='';
   document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===name));
-  ({home:renderHome,col:renderCol,gacha:renderGacha,prof:renderProfile}[name]||(()=>{}))();
+  ({home:renderHome,col:renderCol,gacha:renderGacha,prof:renderProfile,act:()=>{}}[name]||(()=>{}))();
 }
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.go));
 
 /* ================= RENDER ================= */
 function renderTop(){$('chipPoints').textContent='💎 '+S.points;$('chipSpins').textContent='🎟️ '+S.spins}
-function renderHome(){
-  $('homeProg').textContent=S.owned.length+'/'+CHARS.length+' nhân vật · 2 series hoàn thành';
-  $('homeSpins').textContent=S.spins;
-  $('homeOwned').innerHTML=CHARS.map(c=>{const s=SERIES.find(x=>x.id===c.series);
-    return `<div class="mini" style="border-color:${s.c1}" onclick="openChar('${c.id}')"><span class="em">${c.emoji}</span><b>${c.name}</b><small>${s.emoji} ${s.short}</small></div>`}).join('');
+function renderHome(){renderHomeChar()}
+function renderHomeChar(){
+  const c=curC(),s=serOf(c.id);
+  $('charEmoji').textContent=c.emoji;
+  $('charNameChip').textContent=c.emoji+' '+c.name;
+  $('charName').textContent=c.name;
+  $('charRar').textContent=RAR[c.rar].label;$('charRar').className='rar-chip '+RAR[c.rar].cls;
+  const se=$('charSeries');se.textContent=`${s.emoji} ${s.name}`;se.style.background=`linear-gradient(90deg,${s.c1},${s.c2})`;
+  $('charTag').textContent=c.tag;
+  $('charLore').textContent=c.lore;
+  const ownedActs=ALL_ACTIONS.filter(a=>S.acts.includes(a.id));
+  const lockedN=ALL_ACTIONS.length-ownedActs.length;
+  $('charActions').innerHTML=
+    c.actions.map((a,i)=>`<button class="btn small ghost" onclick="playAction(${i})">${a.icon} ${a.label}</button>`).join('')+
+    ownedActs.map(a=>`<button class="btn small ghost" onclick="playGlobal('${a.id}')">${a.emoji} ${a.name}</button>`).join('')+
+    (lockedN?`<button class="btn small" style="background:#FFE9F0;color:#C58AA5" onclick="go('gacha')">🔒 ${lockedN} hành động</button>`:'');
+  const rnd=ownedActs.length?ownedActs[Math.floor(Math.random()*ownedActs.length)]:null;
+  const qb=[
+    {ic:c.actions[0].icon,lb:'Chào',fn:`playAction(0)`},
+    {ic:c.actions[1].icon,lb:c.actions[1].label,fn:`playAction(1)`},
+    c.actions[2]?{ic:c.actions[2].icon,lb:c.actions[2].label,fn:`playAction(2)`}:null,
+    rnd?{ic:'🎲',lb:'Ngẫu nhiên',fn:`playGlobal('${rnd.id}')`}:{ic:'🎰',lb:'Gacha',fn:`go('gacha')`},
+    {ic:'📸',lb:'Chụp',fn:`openPhoto()`}
+  ].filter(Boolean);
+  $('quickbar').innerHTML=qb.map(b=>`<button class="qbtn" onclick="${b.fn}"><span class="qi">${b.ic}</span><small>${b.lb}</small></button>`).join('');
+  applyCharBG(c.id);renderAcc(c.id);hideBubble();
+}
+function switchChar(dir){
+  const i=CHARS.findIndex(c=>c.id===S.cur);
+  S.cur=CHARS[(i+dir+CHARS.length)%CHARS.length].id;save();
+  renderHomeChar();toast(curC().emoji+' '+curC().name+' lên sân khấu!');
+}
+function petChar(){
+  const c=curC();
+  const em=$('charEmoji');em.className='em';void em.offsetWidth;em.classList.add('anim-b');
+  const st=$('charStage');
+  const H=['❤️','💖','💕','✨'];
+  for(let i=0;i<5;i++){const h=document.createElement('span');h.className='heart';
+    h.textContent=H[Math.floor(Math.random()*H.length)];
+    h.style.left=(30+Math.random()*40)+'%';h.style.top='45%';
+    h.style.setProperty('--hx',(Math.random()*120-60)+'px');
+    h.style.setProperty('--hy',(-60-Math.random()*60)+'px');
+    st.appendChild(h);setTimeout(()=>h.remove(),1000);}
+  const allLines=c.actions.flatMap(a=>a.lines);
+  showLine(allLines[Math.floor(Math.random()*allLines.length)]);
 }
 function renderCol(){
   $('colProg').textContent=S.owned.length+'/'+CHARS.length;
@@ -580,10 +615,12 @@ function renderCol(){
            :'<p class="muted" style="font-size:12px">Nhân vật còn thiếu: quét QR hộp hoặc quay Gacha!</p>'}
    </div>
    <div class="cgrid">${list.map(c=>S.owned.includes(c.id)
-     ?`<div class="ccell" style="border-color:${c.color};background:linear-gradient(160deg,${c.color},#fff)" onclick="openChar('${c.id}')"><span class="em">${c.emoji}</span><b>${c.name}</b></div>`
+     ?`<div class="ccell" style="border-color:${c.color};background:linear-gradient(160deg,${c.color},#fff)" onclick="pickFromCol('${c.id}')"><span class="em">${c.emoji}</span><b>${c.name}</b></div>`
      :`<div class="ccell" style="background:#F9F2F5;color:#C9B6C4;border:2px dashed #EAD6E0"><span class="em" style="filter:grayscale(1);opacity:.5">❓</span><b>???</b></div>`).join('')}</div>`;
 }
+let COL_CUR='legend';
 function setSeries(id){COL_CUR=id;renderCol()}
+function pickFromCol(id){S.cur=id;save();go('home');toast('⬆️ Đã đưa '+curC().name+' lên sân khấu!')}
 function renderGacha(){
   $('gSpins').textContent=S.spins;$('gBtn').disabled=S.spins<=0;
   $('actPool').innerHTML=ALL_ACTIONS.map(a=>{
@@ -603,7 +640,7 @@ function renderProfile(){$('profPoints').textContent=S.points;$('profSpins').tex
     :'<p class="muted">Chưa có huy hiệu — hoàn thành 1 series để nhận!</p>';}
 function renderAll(){renderTop();renderHome();renderCol();renderGacha();renderProfile();save()}
 
-/* ================= LEMOO STUDIO ================= */
+/* ================= WARDROBE (1 nút 👗) ================= */
 function ensureDress(cid){if(!S.dress[cid])S.dress[cid]={acc:{},bg:'room'};return S.dress[cid]}
 function getAccItem(cid,slot){const d=S.dress[cid];if(!d||d.acc[slot]==null)return null;return ACC[slot].items[d.acc[slot]]}
 function renderAcc(cid){
@@ -619,79 +656,65 @@ function applyCharBG(cid){
   $('charStage').style.background=`linear-gradient(180deg,${b.c1},${b.c2})`;
   $('decorLayer').innerHTML=b.decor.map(d2=>`<span style="left:${d2[1]};top:${d2[2]};font-size:38px">${d2[0]}</span>`).join('');
 }
-function openAcc(slot){
-  ACC_CUR=slot;const cid=CUR.id;
-  if(slot==='bg'){
-    $('accTitle').textContent='🖼 Nền phòng';
-    $('accItems').innerHTML=BGS_CHAR.map(b=>{
-      const sel=ensureDress(cid).bg===b.id?'sel':'';
+/* Mở bảng trang phục — 1 nút duy nhất, tab theo nhóm */
+function openDress(tab){
+  if(tab)DRESS_TAB=tab;
+  const c=curC();
+  $('dressWho').textContent='Đang phối cho: '+c.emoji+' '+c.name+' (lưu riêng theo từng nhân vật)';
+  renderDress();openModal('mDress');
+}
+function renderDress(){
+  const cid=S.cur;
+  const tabs=[...SLOTS.map(s=>({id:s,label:ACC[s].label})),{id:'bg',label:'🖼 Nền'}];
+  $('dressTabs').innerHTML=tabs.map(t=>
+    `<button class="dtab ${DRESS_TAB===t.id?'on':''}" onclick="DRESS_TAB='${t.id}';renderDress()">${t.label}</button>`).join('');
+  if(DRESS_TAB==='bg'){
+    const cur=ensureDress(cid).bg;
+    $('dressItems').innerHTML=BGS_CHAR.map(b=>{
+      const sel=cur===b.id?'sel':'';
       return `<button class="accchip ${sel}" onclick="pickBg('${b.id}')"><span style="display:block;width:34px;height:34px;border-radius:10px;background:linear-gradient(180deg,${b.c1},${b.c2});border:1px solid #eee"></span><small>${b.label}</small></button>`}).join('');
   }else{
-    $('accTitle').textContent=ACC[slot].label;
-    const cur=ensureDress(cid).acc[slot];
-    $('accItems').innerHTML=ACC[slot].items.map((it,i)=>{
+    const cur=ensureDress(cid).acc[DRESS_TAB];
+    $('dressItems').innerHTML=ACC[DRESS_TAB].items.map((it,i)=>{
       const sel=cur===i?'sel':'';
-      return `<button class="accchip ${sel}" onclick="pickAcc('${slot}',${i})">${it.e}</button>`}).join('');
+      return `<button class="accchip ${sel}" onclick="pickAcc('${DRESS_TAB}',${i})">${it.e}</button>`}).join('');
   }
-  $('accPanel').style.display='';$('accPanel').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
-function closeAcc(){$('accPanel').style.display='none';ACC_CUR=null}
-function pickAcc(slot,i){const d=ensureDress(CUR.id);d.acc[slot]=(d.acc[slot]===i?null:i);save();renderAcc(CUR.id);openAcc(slot)}
-function pickBg(id){ensureDress(CUR.id).bg=id;save();applyCharBG(CUR.id);openAcc('bg')}
-function clearAccSlot(){if(!ACC_CUR||ACC_CUR==='bg')return;ensureDress(CUR.id).acc[ACC_CUR]=null;save();renderAcc(CUR.id);openAcc(ACC_CUR)}
-function clearAllAcc(){const d=ensureDress(CUR.id);d.acc={};save();renderAcc(CUR.id);openAcc(ACC_CUR);toast('🧹 Đã xóa trang phục!')}
+function pickAcc(slot,i){const d=ensureDress(S.cur);d.acc[slot]=(d.acc[slot]===i?null:i);save();renderAcc(S.cur);renderDress()}
+function pickBg(id){ensureDress(S.cur).bg=id;save();applyCharBG(S.cur);renderDress()}
+function clearAccSlot(){if(DRESS_TAB==='bg')return;ensureDress(S.cur).acc[DRESS_TAB]=null;save();renderAcc(S.cur);renderDress()}
+function clearAllAcc(){const d=ensureDress(S.cur);d.acc={};save();renderAcc(S.cur);renderDress();toast('🧹 Đã xóa trang phục!')}
 
-/* ================= TRANG NHÂN VẬT ================= */
-function openChar(id){
-  const c=CHARS.find(x=>x.id===id),s=serOf(id);CUR.id=id;
-  ensureDress(id);
-  $('charEmoji').textContent=c.emoji;
-  $('charName').textContent=c.name;
-  $('charRar').textContent=RAR[c.rar].label;$('charRar').className='rar-chip '+RAR[c.rar].cls;
-  const se=$('charSeries');se.textContent=`${s.emoji} ${s.name}`;se.style.background=`linear-gradient(90deg,${s.c1},${s.c2})`;
-  $('charTag').textContent=c.tag;
-  $('charLore').textContent=c.lore;
-  /* Hành động riêng + hành động đã sở hữu (gacha & giftcode) + nút khóa */
-  const ownedActs=ALL_ACTIONS.filter(a=>S.acts.includes(a.id));
-  const lockedGift=GIFT_ACTIONS.filter(a=>!S.acts.includes(a.id)).length;
-  const lockedGacha=ACTIONS.filter(a=>!S.acts.includes(a.id)).length;
-  $('charActions').innerHTML=
-    c.actions.map((a,i)=>`<button class="btn small ghost" onclick="playAction(${i})">${a.icon} ${a.label}</button>`).join('')+
-    ownedActs.map(a=>`<button class="btn small ghost" onclick="playGlobal('${a.id}')">${a.emoji} ${a.name}</button>`).join('')+
-    (lockedGacha+lockedGift?`<button class="btn small" style="background:#FFE9F0;color:#C58AA5" onclick="go('gacha')">🔒 ${lockedGacha+lockedGift} hành động</button>`:'');
-  $('btnPhoto').onclick=()=>openPhoto(c);$('btn3d').onclick=open3D;$('btnShare').onclick=()=>shareChar(c);
-  $('btnReady').onclick=()=>openPhoto(c);
-  applyCharBG(id);renderAcc(id);hideBubble();closeAcc();go('char');
-}
+/* ================= HÀNH ĐỘNG & THOẠI ================= */
 let bubTimer;
 function showLine(line){
   const b=$('charBubble');b.textContent=line;b.classList.add('show');
-  clearTimeout(bubTimer);bubTimer=setTimeout(hideBubble,2600);
+  clearTimeout(bubTimer);bubTimer=setTimeout(hideBubble,2800);
 }
 function playAction(i){
-  const c=CHARS.find(x=>x.id===CUR.id),a=c.actions[i],em=$('charEmoji');
+  const c=curC(),a=c.actions[i],em=$('charEmoji');
   em.className='em';void em.offsetWidth;em.classList.add(a.anim);
   showLine(a.lines[Math.floor(Math.random()*a.lines.length)]);
 }
-/* Hành động từ Gacha/Giftcode: animation chung — thoại theo nhân vật đang mở */
 function playGlobal(aid){
-  const a=ALL_ACTIONS.find(x=>x.id===aid),c=CHARS.find(x=>x.id===CUR.id);
+  const a=ALL_ACTIONS.find(x=>x.id===aid),c=curC();
   const em=$('charEmoji');em.className='em';void em.offsetWidth;em.classList.add(a.anim);
   showLine(a.byChar[c.id]||'✨');
   if(a.secret||a.id==='spin')burst($('charStage'),14);
 }
 function hideBubble(){$('charBubble').classList.remove('show')}
-function shareChar(c){
+function shareChar(){
+  const c=curC();
   const text=`Mình vừa giải cứu ${c.emoji} ${c.name} — chibi dân gian Việt trong Lemoo! 🍋✨ #Lemoo #ArtToy`;
   if(navigator.share)navigator.share({title:'Lemoo',text}).catch(()=>{});
   else{navigator.clipboard?.writeText(text);toast('Đã copy caption — dán lên TikTok/Reels nhé!')}
 }
 
 /* ================= REVEAL ================= */
-function burst(el,n){
-  const E=['✨','🎉','💫','⭐','🎊'];
+function burst(el,n,E){
+  const arr=E||['✨','🎉','💫','⭐','🎊'];
   for(let i=0;i<n;i++){const sp=document.createElement('span');sp.className='confetti';
-    sp.textContent=E[Math.floor(Math.random()*E.length)];sp.style.left='50%';sp.style.top='45%';
+    sp.textContent=arr[Math.floor(Math.random()*arr.length)];sp.style.left='50%';sp.style.top='45%';
     sp.style.setProperty('--dx',(Math.random()*260-130)+'px');
     sp.style.setProperty('--dy',(Math.random()*-180-40)+'px');
     el.appendChild(sp);setTimeout(()=>sp.remove(),1200);}
@@ -705,8 +728,6 @@ function revealShow(emoji){const box=$('revBox'),ch=$('revChar');
   box.classList.remove('shaking');box.style.display='none';
   ch.textContent=emoji;ch.style.display='';
   ch.classList.add('showing');burst($('revStage'),12);}
-
-/* Reveal HÀNH ĐỘNG (từ Gacha) */
 function openRevealAction(a,isNew){
   revealOpen();
   setTimeout(()=>{
@@ -715,10 +736,7 @@ function openRevealAction(a,isNew){
     if(isNew){
       $('revTitle').innerHTML=`${a.emoji} ${a.name} <span class="rar-chip ${r.cls}">${r.label}</span>`;
       $('revSub').innerHTML=`🎬 <b>Hành động mới!</b> Mọi nhân vật đều dùng được — lời thoại tự đổi theo tính cách!`;
-      const first=S.owned[0],fc=CHARS.find(x=>x.id===first);
-      $('revBtns').innerHTML=first
-        ?`<button class="btn" onclick="closeModal('mReveal');openChar('${first}');setTimeout(()=>playGlobal('${a.id}'),350)">Thử ngay trên ${fc.emoji} ${fc.name} ✨</button><button class="btn ghost" style="margin-top:8px" onclick="closeModal('mReveal')">Đóng</button>`
-        :`<button class="btn" onclick="closeModal('mReveal')">Đóng</button>`;
+      $('revBtns').innerHTML=`<button class="btn" onclick="closeModal('mReveal');go('home');setTimeout(()=>playGlobal('${a.id}'),350)">Thử ngay trên ${curC().emoji} ${curC().name} ✨</button><button class="btn ghost" style="margin-top:8px" onclick="closeModal('mReveal')">Đóng</button>`;
     }else{
       $('revTitle').innerHTML=`Trùng hành động! ${a.emoji}`;
       $('revSub').textContent='+100 💎 điểm đổi';
@@ -727,7 +745,7 @@ function openRevealAction(a,isNew){
   },1300);
 }
 
-/* ================= KÍCH HOẠT (mô phỏng — nhân vật đã mở sẵn) ================= */
+/* ================= KÍCH HOẠT (mô phỏng) ================= */
 function drawQR(cv){
   const ctx=cv.getContext('2d'),n=21,sz=cv.width/n;
   ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);ctx.fillStyle='#333';
@@ -767,13 +785,13 @@ function activateCode(){
  $('codeChips').innerHTML=CHARS.map(c=>{const s=SERIES.find(x=>x.id===c.series);
   return `<button class="chip" style="cursor:pointer;font-size:12px" onclick="$('codeInput').value='${c.id}'">${s.emoji} ${c.id}</button>`}).join('');
 
-/* ================= GACHA — QUAY HÀNH ĐỘNG ================= */
+/* ================= GACHA — HÀNH ĐỘNG ================= */
 function rollAction(){
   const r=Math.random()*100;
   const rar=r<WEIGHTS.secret?'secret':r<WEIGHTS.secret+WEIGHTS.rare?'rare':'common';
   let pool=ACTIONS.filter(a=>a.rar===rar&&!S.acts.includes(a.id));
   if(!pool.length)pool=ACTIONS.filter(a=>!S.acts.includes(a.id));
-  if(!pool.length)return null; /* đủ hết hành động → quy điểm */
+  if(!pool.length)return null;
   return pool[Math.floor(Math.random()*pool.length)];
 }
 function doGacha(){
@@ -824,8 +842,8 @@ function redeemGift(){
 
 /* ================= PHOTOBOOTH ================= */
 let pStream=null,pPos={x:.5,y:.55},pBgIdx=0,noCam=true;
-function openPhoto(c){
-  CURPHOTO=c;const d=ensureDress(c.id);
+function openPhoto(){
+  const c=curC();CURPHOTO=c;const d=ensureDress(c.id);
   pBgIdx=Math.max(0,BGS_CHAR.findIndex(b=>b.id===d.bg));
   $('pChar').textContent=c.emoji;
   openModal('mPhoto');$('pResult').style.display='none';$('pStage').style.display='';
@@ -890,8 +908,7 @@ function loadMV(){if(mvLoaded)return;const s=document.createElement('script');s.
   document.head.appendChild(s);mvLoaded=true}
 function open3D(){
   loadMV();
-  /* 🔧 THAY 3D CỦA BẠN: đổi src thành file .glb đặt cạnh index.html
-     (VD: src="vunuong.glb" ios-src="vunuong.usdz") */
+  /* 🔧 THAY 3D CỦA BẠN: đổi src thành file .glb đặt cạnh index.html */
   $('mvWrap').innerHTML=`<model-viewer src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
     ar ar-modes="webxr scene-viewer quick-look" camera-controls auto-rotate shadow-intensity="1"
     environment-image="neutral" style="width:100%;height:340px;border-radius:16px"></model-viewer>`;
@@ -904,11 +921,11 @@ function closeModal(id){$(id).classList.remove('show')}
 let toastTimer;
 function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');
   clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2400)}
-function resetDemo(){if(confirm('Reset toàn bộ demo?')){localStorage.removeItem('lemoo_v4');location.reload()}}
+function resetDemo(){if(confirm('Reset toàn bộ demo?')){localStorage.removeItem('lemoo_v5');location.reload()}}
 
 /* INIT */
 renderAll();
-setTimeout(()=>toast('🍋 8 nhân vật mở sẵn! Vào Gacha săn hành động nhé'),800);
+setTimeout(()=>toast('🍋 Bấm 👗 để phối đồ cho nhân vật!'),800);
 </script>
 </body>
 </html>
